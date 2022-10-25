@@ -1,3 +1,17 @@
 {
-    "python.formatting.provider": "autopep8"
+    "python.formatting.provider": "autopep8",
+    "jupyter.kernels.filter": [
+        {
+            "path": "/Users/hyde-mbp/opt/anaconda3/bin/python",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "/python",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "/usr/bin/python3",
+            "type": "pythonEnvironment"
+        }
+    ]
 }
