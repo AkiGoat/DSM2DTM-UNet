@@ -1,6 +1,9 @@
+from torch.utils.data import Dataset, DataLoader
+from torchvision import transforms, datasets, models
 import torch
 import torch.nn as nn
 import torchvision.models
+import numpy as np
 
 
 def convrelu(in_channels, out_channels, kernel, padding):
@@ -82,3 +85,36 @@ class ResNetUNet(nn.Module):
         out = self.conv_last(x)
 
         return out
+
+
+class TestDataset2(Dataset):
+    def __init__(self, test_arr, mask=None, transform=None):
+        #     self.input_images, self.target_masks = simulation.generate_random_data(192, 192, count=count)
+        #   input_images = np.load(io.BytesIO(uploaded['DSMs.npy']))
+        #   target_masks = np.load(io.BytesIO(uploaded['Masks.npy']))
+        #   input_images = np.load(file_path+'Pics.npy')
+        #   target_masks = np.load(file_path+'Masks.npy')
+        #   input_images = input_images[-size:]
+        #   target_masks = target_masks[-size:]
+        #   input_images = input_images[size1:size2]
+        #   target_masks = target_masks[size1:size2]
+        input_images = test_arr
+        if mask is not None:
+            target_masks = mask
+        else:
+            target_masks = np.zeros(
+                (test_arr.shape[0], 2, test_arr.shape[1], test_arr.shape[2]), dtype=np.float32)
+        self.input_images = input_images
+        self.target_masks = target_masks
+        self.transform = transform
+
+    def __len__(self):
+        return len(self.input_images)
+
+    def __getitem__(self, idx):
+        image = self.input_images[idx]
+        mask = self.target_masks[idx]
+        if self.transform:
+            image = self.transform(image)
+
+        return [image, mask]
